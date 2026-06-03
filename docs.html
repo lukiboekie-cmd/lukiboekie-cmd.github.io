@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Docs — LukiLinux</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0f14;
+      --surface: #13161e;
+      --border: #1e2330;
+      --accent: #5effa0;
+      --text: #e8eaf0;
+      --muted: #6b7280;
+      --mono: 'Space Mono', monospace;
+      --sans: 'Syne', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.4;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 2.5rem;
+      background: rgba(13, 15, 20, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 1.1rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--text); }
+    nav ul { display: flex; gap: 2rem; list-style: none; }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-family: var(--mono);
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--accent); }
+    nav a.active { color: var(--accent); }
+
+    /* LAYOUT */
+    .docs-layout {
+      display: flex;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding-top: 6rem;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      padding: 3rem 1.5rem 3rem 2.5rem;
+      position: sticky;
+      top: 60px;
+      height: calc(100vh - 60px);
+      overflow-y: auto;
+      border-right: 1px solid var(--border);
+    }
+
+    .sidebar-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      margin-top: 1.5rem;
+    }
+
+    .sidebar-label:first-child { margin-top: 0; }
+
+    .sidebar ul { list-style: none; }
+
+    .sidebar ul li a {
+      display: block;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.3rem 0;
+      transition: color 0.2s;
+    }
+
+    .sidebar ul li a:hover { color: var(--accent); }
+    .sidebar ul li a.active { color: var(--accent); }
+
+    /* MAIN */
+    .docs-main {
+      flex: 1;
+      padding: 3rem 3rem 6rem;
+      max-width: 720px;
+    }
+
+    .doc-section {
+      margin-bottom: 4rem;
+    }
+
+    .doc-section:first-child { margin-top: 0; }
+
+    .section-tag {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .doc-section h2 {
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .doc-section h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 1.8rem 0 0.6rem;
+    }
+
+    .doc-section p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .doc-section ul {
+      color: var(--muted);
+      font-size: 0.95rem;
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .doc-section ul li { margin-bottom: 0.4rem; }
+
+    .code-block {
+      background: #0a0c10;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem 1.2rem;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--accent);
+      overflow-x: auto;
+      margin: 1rem 0;
+      line-height: 1.8;
+    }
+
+    .code-block .comment { color: var(--muted); }
+
+    .tip {
+      background: rgba(94,255,160,0.05);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      padding: 1rem 1.2rem;
+      margin: 1rem 0;
+      font-size: 0.92rem;
+      color: var(--text);
+    }
+
+    .tip strong { color: var(--accent); }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    @media (max-width: 768px) {
+      nav ul { display: none; }
+      .sidebar { display: none; }
+      .docs-main { padding: 2rem 1.5rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Luki<span>Linux</span></a>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="download.html">Download</a></li>
+    <li><a href="docs.html" class="active">Docs</a></li>
+  </ul>
+</nav>
+
+<div class="docs-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-label">Getting Started</div>
+    <ul>
+      <li><a href="#intro" class="active">Introduction</a></li>
+      <li><a href="#requirements">System Requirements</a></li>
+      <li><a href="#installation">Installation</a></li>
+    </ul>
+    <div class="sidebar-label">Post-Install</div>
+    <ul>
+      <li><a href="#first-steps">First Steps</a></li>
+      <li><a href="#packages">Installing Software</a></li>
+      <li><a href="#updates">Keeping Updated</a></li>
+    </ul>
+    <div class="sidebar-label">Reference</div>
+    <ul>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+  </aside>
+
+  <main class="docs-main">
+
+    <div class="doc-section" id="intro">
+      <p class="section-tag">// Introduction</p>
+      <h2>Welcome to LukiLinux</h2>
+      <p>LukiLinux is a lightweight Linux distribution built on top of Ubuntu. The idea is simple: take a solid, well-supported base, strip out everything that doesn't need to be there, and end up with something that's fast, reliable, and out of your way.</p>
+      <p>If you've used Ubuntu before, you'll feel right at home. Everything you know — apt, the terminal, .deb packages — all works exactly the same. We just removed the parts nobody asked for.</p>
+      <div class="tip"><strong>Note:</strong> LukiLinux is a personal project and is actively being developed. Things may change between releases.</div>
+    </div>
+
+    <div class="doc-section" id="requirements">
+      <p class="section-tag">// Requirements</p>
+      <h2>System Requirements</h2>
+      <p>LukiLinux is designed to run well on older and lower-end hardware. Here's what you need:</p>
+      <ul>
+        <li><strong>CPU:</strong> Any 64-bit (x86_64) processor</li>
+        <li><strong>RAM:</strong> 1 GB minimum — 2 GB or more recommended</li>
+        <li><strong>Storage:</strong> At least 10 GB free space (HDD is fine, SSD will be faster)</li>
+        <li><strong>Desktop:</strong> XFCE 4.18</li>
+        <li><strong>USB Drive:</strong> 4 GB or more (for installation media)</li>
+        <li><strong>Internet:</strong> Recommended but not required to install</li>
+      </ul>
+      <p>If your machine is from the last 15 years and runs 64-bit, it should handle LukiLinux fine.</p>
+    </div>
+
+    <div class="doc-section" id="installation">
+      <p class="section-tag">// Installation</p>
+      <h2>Installing LukiLinux</h2>
+
+      <h3>Step 1 — Download the ISO</h3>
+      <p>Head over to the <a href="download.html" style="color:var(--accent)">Download page</a> and grab the latest stable ISO.</p>
+
+      <h3>Step 2 — Flash it to a USB</h3>
+      <p>Use <strong>Balena Etcher</strong> (recommended for beginners) or <code style="font-family:var(--mono); color:var(--accent)">dd</code> from the terminal.</p>
+      <div class="code-block">
+        <span class="comment"># Linux/Mac terminal method:</span><br>
+        sudo dd if=lukilinux-1.0.iso of=/dev/sdX bs=4M status=progress
+      </div>
+      <div class="tip"><strong>Warning:</strong> Replace <code style="font-family:var(--mono)">/dev/sdX</code> with your actual USB device. Double-check with <code style="font-family:var(--mono)">lsblk</code> first — dd will overwrite whatever is there.</div>
+
+      <h3>Step 3 — Boot from USB</h3>
+      <p>Restart your machine and boot from the USB. You'll usually do this by pressing <strong>F12</strong>, <strong>F2</strong>, or <strong>Delete</strong> at startup to open the boot menu — it varies by manufacturer.</p>
+
+      <h3>Step 4 — Run the Installer</h3>
+      <p>The graphical installer will walk you through partitioning, setting up your user account, and choosing your timezone. It's straightforward — just follow the prompts.</p>
+
+      <h3>Step 5 — Reboot and enjoy</h3>
+      <p>Remove the USB when prompted, reboot, and you're in. First boot takes a moment while things settle — after that it'll be fast every time.</p>
+    </div>
+
+    <div class="doc-section" id="first-steps">
+      <p class="section-tag">// Post-Install</p>
+      <h2>First Steps After Installing</h2>
+      <p>Once you're in, here are a few things worth doing right away.</p>
+
+      <h3>Update everything</h3>
+      <div class="code-block">
+        sudo apt update && sudo apt upgrade -y
+      </div>
+
+      <h3>Install a browser</h3>
+      <div class="code-block">
+        <span class="comment"># Firefox:</span><br>
+        sudo apt install firefox<br><br>
+        <span class="comment"># Or Chromium:</span><br>
+        sudo apt install chromium-browser
+      </div>
+
+      <h3>Set up your locale and timezone</h3>
+      <div class="code-block">
+        sudo dpkg-reconfigure locales<br>
+        sudo dpkg-reconfigure tzdata
+      </div>
+    </div>
+
+    <div class="doc-section" id="packages">
+      <p class="section-tag">// Software</p>
+      <h2>Installing Software</h2>
+      <p>LukiLinux uses <strong>apt</strong>, the same package manager as Ubuntu. If you've ever used Ubuntu or Debian, it's exactly what you know.</p>
+
+      <h3>Search for a package</h3>
+      <div class="code-block">apt search package-name</div>
+
+      <h3>Install a package</h3>
+      <div class="code-block">sudo apt install package-name</div>
+
+      <h3>Remove a package</h3>
+      <div class="code-block">sudo apt remove package-name</div>
+
+      <h3>Install a .deb file manually</h3>
+      <div class="code-block">sudo dpkg -i filename.deb</div>
+
+      <p>You can also add PPAs (Personal Package Archives) for software that isn't in the default repos, same as you would on Ubuntu.</p>
+      <div class="code-block">
+        sudo add-apt-repository ppa:some/ppa<br>
+        sudo apt update<br>
+        sudo apt install the-package
+      </div>
+    </div>
+
+    <div class="doc-section" id="updates">
+      <p class="section-tag">// Updates</p>
+      <h2>Keeping LukiLinux Updated</h2>
+      <p>Since we're built on Ubuntu LTS, you'll get security updates regularly. It's a good habit to update every week or so.</p>
+      <div class="code-block">
+        sudo apt update && sudo apt upgrade -y
+      </div>
+      <p>To also clean up old packages that are no longer needed:</p>
+      <div class="code-block">
+        sudo apt autoremove && sudo apt autoclean
+      </div>
+      <div class="tip"><strong>Tip:</strong> Full distro upgrades (e.g. jumping to a new LTS version) will be announced on this site when they're available.</div>
+    </div>
+
+    <div class="doc-section" id="faq">
+      <p class="section-tag">// FAQ</p>
+      <h2>Frequently Asked Questions</h2>
+
+      <h3>Is this based on Ubuntu?</h3>
+      <p>Yes. LukiLinux is built on Ubuntu LTS. That means full compatibility with Ubuntu packages, PPAs, and documentation.</p>
+
+      <h3>What desktop environment does it use?</h3>
+      <p>That'll be specified on the download page per release. The minimal edition ships with none — you install what you want.</p>
+
+      <h3>Can I install it alongside Windows?</h3>
+      <p>Yes, dual booting works fine. The installer will give you the option to install alongside an existing OS. Just make sure you have backups before messing with partitions.</p>
+
+      <h3>Is it free?</h3>
+      <p>Completely. No cost, no catch, no premium tier. Just Linux.</p>
+
+      <h3>Where do I report bugs or ask questions?</h3>
+      <p>The project is a work in progress — a contact page or GitHub issues link will be added here soon.</p>
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  <span>© 2026 LukiLinux. Made with too much coffee.</span>
+  <span>
+    <a href="index.html">Home</a> &nbsp;·&nbsp;
+    <a href="download.html">Download</a> &nbsp;·&nbsp;
+    <a href="docs.html">Docs</a>
+  </span>
+</footer>
+
+</body>
+</html>
