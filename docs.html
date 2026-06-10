@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Docs | LukiLinux</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg: #0d0f14; --surface: #13161e; --border: #1e2330; --accent: #5effa0; --text: #e8eaf0; --muted: #6b7280; --mono: 'Space Mono', monospace; --sans: 'Syne', sans-serif; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.7; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 999; opacity: 0.4; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2.5rem; background: rgba(13,15,20,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: var(--mono); font-size: 1.1rem; color: var(--accent); text-decoration: none; }
+    .nav-logo span { color: var(--text); }
+    nav ul { display: flex; gap: 2rem; list-style: none; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-family: var(--mono); transition: color 0.2s; }
+    nav a:hover { color: var(--accent); } nav a.active { color: var(--accent); }
+    .docs-layout { display: flex; max-width: 1100px; margin: 0 auto; padding-top: 6rem; min-height: 100vh; }
+    .sidebar { width: 240px; flex-shrink: 0; padding: 3rem 1.5rem 3rem 2.5rem; position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; border-right: 1px solid var(--border); }
+    .sidebar-label { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.8rem; margin-top: 1.5rem; }
+    .sidebar-label:first-child { margin-top: 0; }
+    .sidebar ul { list-style: none; }
+    .sidebar ul li a { display: block; font-family: var(--mono); font-size: 0.82rem; color: var(--muted); text-decoration: none; padding: 0.3rem 0; transition: color 0.2s; }
+    .sidebar ul li a:hover { color: var(--accent); }
+    .docs-main { flex: 1; padding: 3rem 3rem 6rem; max-width: 720px; }
+    .doc-section { margin-bottom: 4rem; }
+    .section-tag { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .doc-section h2 { font-size: 1.9rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 1rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border); }
+    .doc-section h3 { font-size: 1.1rem; font-weight: 600; margin: 1.8rem 0 0.6rem; }
+    .doc-section p { color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem; }
+    .doc-section ul { color: var(--muted); font-size: 0.95rem; padding-left: 1.5rem; margin-bottom: 1rem; }
+    .doc-section ul li { margin-bottom: 0.4rem; }
+    .code-block { background: #0a0c10; border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.2rem; font-family: var(--mono); font-size: 0.82rem; color: var(--accent); overflow-x: auto; margin: 1rem 0; line-height: 1.8; }
+    .comment { color: var(--muted); }
+    .tip { background: rgba(94,255,160,0.05); border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; padding: 1rem 1.2rem; margin: 1rem 0; font-size: 0.92rem; color: var(--text); line-height: 1.7; }
+    .tip strong { color: var(--accent); }
+    footer { border-top: 1px solid var(--border); padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); flex-wrap: wrap; gap: 1rem; }
+    footer a { color: var(--muted); text-decoration: none; } footer a:hover { color: var(--accent); }
+    @media (max-width: 768px) { nav ul { display: none; } .sidebar { display: none; } .docs-main { padding: 2rem 1.5rem 4rem; } }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">Luki<span>Linux</span></a>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="download.html">Download</a></li>
+    <li><a href="docs.html" class="active">Docs</a></li>
+    <li><a href="tools.html">Tools</a></li>
+  </ul>
+</nav>
+
+<div class="docs-layout">
+  <aside class="sidebar">
+    <div class="sidebar-label">Getting Started</div>
+    <ul>
+      <li><a href="#intro">Introduction</a></li>
+      <li><a href="#requirements">System Requirements</a></li>
+      <li><a href="#installation">Installation</a></li>
+    </ul>
+    <div class="sidebar-label">The Desktop</div>
+    <ul>
+      <li><a href="#lxqt">LXQt Overview</a></li>
+      <li><a href="#apps">Default Apps</a></li>
+    </ul>
+    <div class="sidebar-label">Post-Install</div>
+    <ul>
+      <li><a href="#first-steps">First Steps</a></li>
+      <li><a href="#packages">Installing Software</a></li>
+      <li><a href="#updates">Keeping Updated</a></li>
+    </ul>
+    <div class="sidebar-label">Reference</div>
+    <ul>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+  </aside>
+
+  <main class="docs-main">
+
+    <div class="doc-section" id="intro">
+      <p class="section-tag">// Introduction</p>
+      <h2>Welcome to LukiLinux</h2>
+      <p>LukiLinux is a lightweight Linux distribution built on Ubuntu 24.04 LTS. The idea was simple. Take Ubuntu 24.04 as a base, put a properly customised LXQt desktop on top, and strip out anything that has no reason to be there. What you get is something fast, reliable, and out of your way.</p>
+      <p>LXQt is one of the lightest desktop environments available that still looks and feels modern in 2026. Everything you see has been configured specifically for LukiLinux. The theme, icons, panel layout, fonts and wallpaper all match. It is not just a default LXQt install with a different name on it.</p>
+      <div class="tip"><strong>Note:</strong> LukiLinux is an independent project. It uses Ubuntu as its foundation but is not affiliated with Canonical.</div>
+    </div>
+
+    <div class="doc-section" id="requirements">
+      <p class="section-tag">// Requirements</p>
+      <h2>System Requirements</h2>
+      <p>LukiLinux is designed to run well on older and lower-end hardware. If your machine ran Windows 10, it will run LukiLinux.</p>
+      <ul>
+        <li><strong>CPU:</strong> Any 64-bit (x86_64) processor</li>
+        <li><strong>RAM:</strong> 2 GB minimum, 4 GB recommended</li>
+        <li><strong>Storage:</strong> 20 GB minimum. SSD is recommended but HDD works fine</li>
+        <li><strong>USB Drive:</strong> 4 GB or more for installation media</li>
+        <li><strong>Boot:</strong> BIOS/MBR and UEFI both supported</li>
+        <li><strong>Internet:</strong> Recommended but not required to install</li>
+      </ul>
+    </div>
+
+    <div class="doc-section" id="installation">
+      <p class="section-tag">// Installation</p>
+      <h2>Installing LukiLinux</h2>
+
+      <h3>Step 1: Download the ISO</h3>
+      <p>Head to the <a href="download.html" style="color:var(--accent)">Download page</a> and grab the latest stable ISO.</p>
+
+      <h3>Step 2: Flash it to a USB</h3>
+      <p>Use <strong>Balena Etcher</strong> for a simple graphical experience, or use the terminal:</p>
+      <div class="code-block"><span class="comment"># Linux/Mac:</span><br>sudo dd if=LukiLinux-1.0.iso of=/dev/sdX bs=4M status=progress && sync</div>
+      <div class="tip"><strong>Warning:</strong> Replace <code style="font-family:var(--mono)">/dev/sdX</code> with your actual USB device. Double-check with <code style="font-family:var(--mono)">lsblk</code> first. This will wipe whatever is on the drive.</div>
+
+      <h3>Step 3: Boot from USB</h3>
+      <p>Restart and boot from the USB. The key to open the boot menu is usually F12, F2 or Delete at startup. It depends on your motherboard.</p>
+
+      <h3>Step 4: The installer launches automatically</h3>
+      <p>LukiLinux uses its own built-in graphical installer. It launches automatically a few seconds after the desktop loads. You do not need to find it or click anything. It pops up on its own. If for any reason it doesn't, there's a shortcut on the desktop.</p>
+
+      <h3>Step 5: Follow the installer</h3>
+      <p>The installer will walk you through choosing a disk, setting up your user account, picking your timezone, and installing the bootloader. The whole process takes around 10–20 minutes depending on your hardware.</p>
+
+      <h3>Step 6: Reboot</h3>
+      <p>When the installer finishes, remove the USB and reboot. You'll land straight on your LukiLinux desktop.</p>
+    </div>
+
+    <div class="doc-section" id="lxqt">
+      <p class="section-tag">// The Desktop</p>
+      <h2>LXQt: What we changed</h2>
+      <p>LXQt is the desktop environment that runs on top of LukiLinux. Out of the box it's already lightweight and capable, but we've made a number of changes to make it feel like it belongs to LukiLinux rather than just being a default install.</p>
+      <ul>
+        <li><strong>Theme:</strong> Arc-Dark, a clean flat dark theme</li>
+        <li><strong>Icons:</strong> Papirus Dark icon set</li>
+        <li><strong>Font:</strong> Inter, which is easy to read on any screen</li>
+        <li><strong>Panel:</strong> Repositioned and cleaned up so only the useful stuff is there</li>
+        <li><strong>Wallpaper:</strong> Custom LukiLinux wallpaper set as default</li>
+      </ul>
+      <p>All of these defaults apply to new users automatically. If you want to change anything, right-click the desktop or open LXQt Configuration Centre from the applications menu.</p>
+    </div>
+
+    <div class="doc-section" id="apps">
+      <p class="section-tag">// Apps</p>
+      <h2>What comes pre-installed</h2>
+      <p>We ship a minimal set of apps that cover the basics and nothing more. Everything else is up to you to install.</p>
+      <ul>
+        <li><strong>Firefox</strong> for browsing</li>
+        <li><strong>PCManFM-Qt</strong> for managing files</li>
+        <li><strong>Featherpad</strong> for editing text</li>
+        <li><strong>VLC</strong> for media</li>
+        <li><strong>LXTerminal</strong></li>
+        <li><strong>PulseAudio</strong> for sound</li>
+        <li><strong>NetworkManager</strong> with a tray applet</li>
+      </ul>
+      <p>That's it. No office suite, no games, no apps you didn't ask for.</p>
+    </div>
+
+    <div class="doc-section" id="first-steps">
+      <p class="section-tag">// Post-Install</p>
+      <h2>First steps after installing</h2>
+
+      <h3>Update everything</h3>
+      <div class="code-block">sudo apt update && sudo apt upgrade -y</div>
+
+      <h3>Set up your home folders</h3>
+      <div class="code-block">xdg-user-dirs-update</div>
+
+      <h3>Install a browser extension or two</h3>
+      <p>Firefox is ready to go. Head to addons.mozilla.org and grab uBlock Origin at minimum.</p>
+
+      <h3>Check your audio</h3>
+      <div class="code-block">pavucontrol</div>
+    </div>
+
+    <div class="doc-section" id="packages">
+      <p class="section-tag">// Software</p>
+      <h2>Installing software</h2>
+      <p>LukiLinux uses <strong>apt</strong> for installing software, same as Ubuntu and Debian. If you have used either before you already know how this works.</p>
+
+      <h3>Search for a package</h3>
+      <div class="code-block">apt search package-name</div>
+
+      <h3>Install a package</h3>
+      <div class="code-block">sudo apt install package-name</div>
+
+      <h3>Remove a package</h3>
+      <div class="code-block">sudo apt remove package-name</div>
+
+      <h3>Install a .deb file</h3>
+      <div class="code-block">sudo dpkg -i filename.deb</div>
+
+      <h3>Add a PPA</h3>
+      <div class="code-block">sudo add-apt-repository ppa:some/ppa<br>sudo apt update<br>sudo apt install the-package</div>
+
+      <div class="tip"><strong>Tip:</strong> Because LukiLinux is Ubuntu-based, any tutorial or package that works on Ubuntu 24.04 will work here too.</div>
+    </div>
+
+    <div class="doc-section" id="updates">
+      <p class="section-tag">// Updates</p>
+      <h2>Keeping LukiLinux updated</h2>
+      <p>Security and software updates come from Ubuntu's repositories automatically. Run this regularly:</p>
+      <div class="code-block">sudo apt update && sudo apt upgrade -y</div>
+      <p>Clean up old packages periodically:</p>
+      <div class="code-block">sudo apt autoremove && sudo apt autoclean</div>
+      <div class="tip"><strong>New LukiLinux releases</strong> will be announced on this site. When a new ISO drops, existing installs do not need to be reinstalled. Keep running apt upgrade and you will stay current.</div>
+    </div>
+
+    <div class="doc-section" id="faq">
+      <p class="section-tag">// FAQ</p>
+      <h2>Frequently asked questions</h2>
+
+      <h3>Is this based on Ubuntu?</h3>
+      <p>Yes. LukiLinux is built on Ubuntu 24.04 LTS. Full compatibility with Ubuntu packages, PPAs, and documentation.</p>
+
+      <h3>Why LXQt and not GNOME or KDE?</h3>
+      <p>GNOME and KDE are both excellent but they're heavy. LXQt gives you a modern, functional desktop at a fraction of the resource cost. It idles under 400MB of RAM which leaves plenty of headroom for what you're actually doing.</p>
+
+      <h3>Can I install it alongside Windows?</h3>
+      <p>Yes. The installer supports dual boot. It will detect Windows during partitioning and give you options. Make sure you have backups before touching partitions.</p>
+
+      <h3>Does it support UEFI?</h3>
+      <p>Yes. Both BIOS/MBR and UEFI are supported. The installer detects which one your machine uses automatically.</p>
+
+      <h3>Is it free?</h3>
+      <p>Completely. No cost, no catch, no premium tier. Just Linux.</p>
+
+      <h3>What's the difference between the full and minimal editions?</h3>
+      <p>The full edition ships with the LXQt desktop and all the default apps. The minimal edition is just a base Ubuntu system with a terminal and no desktop. It is for people who want to build their own setup from scratch.</p>
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  <span>© 2026 LukiLinux. Made with too much coffee.</span>
+  <span>
+    <a href="index.html">Home</a> &nbsp;·&nbsp;
+    <a href="download.html">Download</a> &nbsp;·&nbsp;
+    <a href="docs.html">Docs</a> &nbsp;·&nbsp;
+    <a href="tools.html">Tools</a>
+  </span>
+</footer>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LukiLinux | Fast. Simple. Yours.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0f14; --surface: #13161e; --border: #1e2330;
+      --accent: #5effa0; --text: #e8eaf0; --muted: #6b7280;
+      --mono: 'Space Mono', monospace; --sans: 'Syne', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.7; overflow-x: hidden; }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 999; opacity: 0.4;
+    }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 2.5rem;
+      background: rgba(13,15,20,0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: var(--mono); font-size: 1.1rem; color: var(--accent); text-decoration: none; letter-spacing: -0.03em; }
+    .nav-logo span { color: var(--text); }
+    nav ul { display: flex; gap: 2rem; list-style: none; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-family: var(--mono); transition: color 0.2s; }
+    nav a:hover { color: var(--accent); }
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      justify-content: center; padding: 8rem 2.5rem 4rem;
+      position: relative; overflow: hidden;
+    }
+    .hero::after {
+      content: ''; position: absolute; top: -20%; right: -10%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(94,255,160,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.6s ease forwards 0.1s; }
+    .hero h1 { font-size: clamp(3rem,10vw,7rem); font-weight: 800; line-height: 1.0; letter-spacing: -0.04em; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.6s ease forwards 0.25s; }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero-sub { font-size: 1.15rem; color: var(--muted); max-width: 520px; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.6s ease forwards 0.4s; }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.6s ease forwards 0.55s; }
+    .btn { font-family: var(--mono); font-size: 0.85rem; padding: 0.85rem 1.8rem; border-radius: 4px; text-decoration: none; transition: all 0.2s; display: inline-block; }
+    .btn-primary { background: var(--accent); color: #0d0f14; font-weight: 700; }
+    .btn-primary:hover { background: #7fffb8; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(94,255,160,0.25); }
+    .btn-secondary { border: 1px solid var(--border); color: var(--text); }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    .terminal { margin-top: 4rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; max-width: 560px; overflow: hidden; opacity: 0; animation: fadeUp 0.6s ease forwards 0.7s; }
+    .terminal-bar { background: #1a1d26; padding: 0.6rem 1rem; display: flex; gap: 0.5rem; align-items: center; }
+    .terminal-bar span { width: 12px; height: 12px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; } .dot-y { background: #febc2e; } .dot-g { background: #28c840; }
+    .terminal-body { padding: 1.2rem 1.5rem; font-family: var(--mono); font-size: 0.85rem; line-height: 2; }
+    .t-prompt { color: var(--accent); } .t-cmd { color: var(--text); } .t-out { color: var(--muted); }
+    .section { padding: 6rem 2.5rem; max-width: 1100px; margin: 0 auto; }
+    .section-label { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1rem; }
+    .section h2 { font-size: clamp(1.8rem,4vw,3rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 1rem; }
+    .section-intro { color: var(--muted); max-width: 540px; margin-bottom: 3rem; font-size: 1.05rem; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 1.5rem; }
+    .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.8rem; transition: border-color 0.2s, transform 0.2s; }
+    .feature-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .feature-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+    .feature-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .feature-card p { color: var(--muted); font-size: 0.92rem; }
+    .specs-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 0.85rem; }
+    .specs-table tr { border-bottom: 1px solid var(--border); }
+    .specs-table td { padding: 1rem 0; }
+    .specs-table td:first-child { color: var(--muted); width: 40%; }
+    .specs-table td:last-child { color: var(--accent); }
+    .cta-section { padding: 6rem 2.5rem; text-align: center; position: relative; overflow: hidden; }
+    .cta-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(94,255,160,0.05) 0%, transparent 70%); pointer-events: none; }
+    .cta-section h2 { font-size: clamp(2rem,5vw,3.5rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 1rem; }
+    .cta-section p { color: var(--muted); margin-bottom: 2rem; font-size: 1.05rem; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); flex-wrap: wrap; gap: 1rem; }
+    footer a { color: var(--muted); text-decoration: none; } footer a:hover { color: var(--accent); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 600px) { nav ul { display: none; } .hero { padding: 7rem 1.5rem 3rem; } .section { padding: 4rem 1.5rem; } footer { flex-direction: column; text-align: center; } }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">Luki<span>Linux</span></a>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="download.html">Download</a></li>
+    <li><a href="docs.html">Docs</a></li>
+    <li><a href="tools.html">Tools</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <p class="hero-tag">// Based on Ubuntu · Custom LXQt desktop</p>
+  <h1>Linux that<br>gets out of<br>your <em>way.</em></h1>
+  <p class="hero-sub">LukiLinux is a lightweight distro built on Ubuntu 24.04 with a fully customised LXQt desktop. It boots fast, runs lean, and doesn't bloat your machine with stuff you never asked for.</p>
+  <div class="hero-actions">
+    <a href="download.html" class="btn btn-primary">Download Now</a>
+    <a href="docs.html" class="btn btn-secondary">Read the Docs</a>
+  </div>
+  <div class="terminal">
+    <div class="terminal-bar">
+      <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
+    </div>
+    <div class="terminal-body">
+      <div><span class="t-prompt">luki@linux:~$ </span><span class="t-cmd">neofetch</span></div>
+      <div class="t-out">OS: LukiLinux 1.0 x86_64</div>
+      <div class="t-out">Kernel: 6.8.0-124-generic</div>
+      <div class="t-out">DE: LXQt 1.4 (customised)</div>
+      <div class="t-out">Shell: bash 5.2.21</div>
+      <div class="t-out">RAM: 380MiB / 2048MiB</div>
+      <div class="t-out">Disk: HDD / SSD supported</div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <p class="section-label">// Why LukiLinux</p>
+  <h2>Designed to be fast.<br>Not just marketed as it.</h2>
+  <p class="section-intro">Most distros promise speed and then quietly run a dozen services in the background. LukiLinux actually delivers on it. You will feel the difference on the first boot.</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>Boots in seconds</h3>
+      <p>A lean init process and stripped-down startup means you're at your desktop fast. No splash screens stalling things out.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧠</div>
+      <h3>Under 400MB idle RAM</h3>
+      <p>LXQt is one of the lightest desktop environments that still looks great in 2026. Plenty of headroom left for what you're actually running.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🖥️</div>
+      <h3>Custom LXQt desktop</h3>
+      <p>We didn't just install LXQt and ship it. The whole desktop has been put together specifically for LukiLinux. Icons, theme, panel, fonts, all of it.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📦</div>
+      <h3>Ubuntu compatible</h3>
+      <p>Built on Ubuntu 24.04 LTS. Every .deb package, PPA, and apt command you already know just works. No learning curve on that front.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔧</div>
+      <h3>No bloat, ever</h3>
+      <p>We don't ship games, office suites, or anything you didn't ask for. Install what you want. Nothing else comes along for the ride.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <h3>Long-term support</h3>
+      <p>Ubuntu 24.04 LTS gets security patches through 2029. You're not going to be left chasing updates every six months.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💿</div>
+      <h3>Runs on old hardware</h3>
+      <p>Got a machine from 2012 collecting dust? LukiLinux will run on it. HDD support, low RAM requirements, no GPU needed.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🛠️</div>
+      <h3>Built-in installer</h3>
+      <p>Our own graphical installer handles partitioning, user setup and the bootloader. No third party tools involved.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <p class="section-label">// System specs</p>
+  <h2>What you need to run it</h2>
+  <p class="section-intro">LukiLinux is lightweight but it is still a full desktop OS. These are realistic numbers for a good experience.</p>
+  <table class="specs-table">
+    <tr><td>Architecture</td><td>x86_64 (64-bit)</td></tr>
+    <tr><td>Minimum RAM</td><td>2 GB (4 GB recommended)</td></tr>
+    <tr><td>Recommended RAM</td><td>4 GB or more for comfortable daily use</td></tr>
+    <tr><td>Minimum Storage</td><td>20 GB (SSD strongly recommended, HDD supported)</td></tr>
+    <tr><td>Minimum CPU</td><td>Dual-core 64-bit, 1.5 GHz or faster</td></tr>
+    <tr><td>Desktop Environment</td><td>LXQt 1.4 (customised)</td></tr>
+    <tr><td>Base</td><td>Ubuntu 24.04 LTS</td></tr>
+    <tr><td>Default Shell</td><td>bash</td></tr>
+    <tr><td>Init System</td><td>systemd</td></tr>
+    <tr><td>Package Manager</td><td>apt</td></tr>
+    <tr><td>Boot Support</td><td>BIOS/MBR and UEFI</td></tr>
+    <tr><td>License</td><td>Free &amp; Open Source</td></tr>
+  </table>
+</section>
+
+<section class="cta-section">
+  <h2>Ready to give it a shot?</h2>
+  <p>It's free. Grab the ISO and try it out. No installation needed to test it, it runs straight from the USB.</p>
+  <a href="download.html" class="btn btn-primary">Download LukiLinux</a>
+</section>
+
+<footer>
+  <span>© 2026 LukiLinux. Made with too much coffee.</span>
+  <span>
+    <a href="index.html">Home</a> &nbsp;·&nbsp;
+    <a href="download.html">Download</a> &nbsp;·&nbsp;
+    <a href="docs.html">Docs</a> &nbsp;·&nbsp;
+    <a href="tools.html">Tools</a>
+  </span>
+</footer>
+</body>
+</html>
